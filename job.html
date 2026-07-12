@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechJobs - Job Board</title>
+    <style>
+        /* CSS Styling */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background: #f3f4f6;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            margin-left: 1rem;
+            font-size: 1rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .nav-links button.btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-links button.btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Hero & Search Section */
+        header {
+            background: linear-gradient(rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80') center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Main Content Area */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--text-dark);
+        }
+
+        /* Job Listings */
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .job-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .job-company {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-details {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Forms (Post Job / Apply) */
+        .form-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        /* Views management */
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+            }
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="switchView('home')">TechJobs</div>
+        <div class="nav-links">
+            <button onclick="switchView('home')">Find Jobs</button>
+            <button onclick="switchView('employer')">Post a Job</button>
+            <button class="btn-primary" onclick="alert('Login functionality requires a backend.')">Sign In</button>
+        </div>
+    </nav>
+
+    <!-- Home View -->
+    <div id="home" class="view active">
+        <header>
+            <h1>Find Your Dream Job Today</h1>
+            <p>Connecting top talent with the best employers worldwide.</p>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Job title, keywords, or company...">
+                <button class="btn-primary" onclick="searchJobs()">Search</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <h2 class="section-title">Featured Job Listings</h2>
+            <div class="job-grid" id="jobGrid">
+                <!-- Jobs will be injected here by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Job Detail View -->
+    <div id="job-detail" class="view">
+        <main class="container">
+            <button onclick="switchView('home')" style="margin-bottom: 1rem; cursor: pointer; border:none; background:none; color: var(--primary-color);">← Back to Jobs</button>
+            <div class="form-container" id="detailContent">
+                <!-- Detail content injected by JS -->
+            </div>
+            
+            <div class="form-container" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Apply for this position</h3>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Resume (Mock Upload)</label>
+                    <input type="file">
+                </div>
+                <button class="btn-submit" onclick="submitApplication()">Submit Application</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Employer Dashboard / Post Job View -->
+    <div id="employer" class="view">
+        <main class="container">
+            <h2 class="section-title" style="text-align: center;">Employer Dashboard - Post a Job</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" id="postTitle" placeholder="e.g. Senior Frontend Developer">
+                </div>
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" id="postCompany" placeholder="e.g. TechCorp">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="postLocation" placeholder="e.g. Remote, NY, etc.">
+                </div>
+                <div class="form-group">
+                    <label>Job Description</label>
+                    <textarea id="postDesc" rows="5" placeholder="Describe the role..."></textarea>
+                </div>
+                <button class="btn-submit" onclick="postNewJob()">Post Job Listing</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mock Database (Simulating MongoDB/PostgreSQL)
+        let jobsDatabase = [
+            { id: 1, title: "Full Stack React Developer", company: "TechNova", location: "Remote", type: "Full-Time", desc: "Looking for an experienced React and Node.js developer to build scalable applications." },
+            { id: 2, title: "Backend Engineer (Node.js)", company: "CloudSync", location: "New York, NY", type: "Full-Time", desc: "Join our core infrastructure team. PostgreSQL experience required." },
+            { id: 3, title: "UI/UX Designer", company: "CreativeSolutions", location: "San Francisco, CA", type: "Contract", desc: "Design intuitive interfaces for our upcoming web platform." },
+            { id: 4, title: "Frontend Intern", company: "StartupX", location: "Remote", type: "Internship", desc: "Great opportunity to learn HTML, CSS, and JS in a fast-paced environment." }
+        ];
+
+        // Function to render jobs to the DOM
+        function renderJobs(jobsToRender) {
+            const jobGrid = document.getElementById('jobGrid');
+            jobGrid.innerHTML = ''; // Clear current
+
+            if (jobsToRender.length === 0) {
+                jobGrid.innerHTML = '<p>No jobs found matching your criteria.</p>';
+                return;
+            }
+
+            jobsToRender.forEach(job => {
+                const card = document.createElement('div');
+                card.className = 'job-card';
+                card.onclick = () => viewJobDetail(job.id);
+                card.innerHTML = `
+                    <h3 class="job-title">${job.title}</h3>
+                    <div class="job-company">${job.company}</div>
+                    <div class="job-details">
+                        📍 ${job.location} <br>
+                        💼 ${job.type}
+                    </div>
+                `;
+                jobGrid.appendChild(card);
+            });
+        }
+
+        // Search Functionality
+        function searchJobs() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filteredJobs = jobsDatabase.filter(job => 
+                job.title.toLowerCase().includes(query) || 
+                job.company.toLowerCase().includes(query)
+            );
+            renderJobs(filteredJobs);
+        }
+
+        // View Management (Single Page App Simulation)
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById(viewId).classList.add('active');
+            
+            if(viewId === 'home') {
+                document.getElementById('searchInput').value = '';
+                renderJobs(jobsDatabase);
+            }
+        }
+
+        // View Specific Job Details
+        function viewJobDetail(jobId) {
+            const job = jobsDatabase.find(j => j.id === jobId);
+            if(!job) return;
+
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <h2 style="color: var(--primary-color); margin-bottom: 0.5rem;">${job.title}</h2>
+                <h4 style="margin-bottom: 1rem;">${job.company} | ${job.location} | ${job.type}</h4>
+                <hr style="margin-bottom: 1rem; border: 0; border-top: 1px solid #eee;">
+                <p><strong>Job Description:</strong></p>
+                <p style="margin-top: 0.5rem;">${job.desc}</p>
+            `;
+            
+            switchView('job-detail');
+        }
+
+        // Simulate Posting a Job (Employer Dashboard)
+        function postNewJob() {
+            const title = document.getElementById('postTitle').value;
+            const company = document.getElementById('postCompany').value;
+            const location = document.getElementById('postLocation').value;
+            const desc = document.getElementById('postDesc').value;
+
+            if(!title || !company || !location || !desc) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const newJob = {
+                id: jobsDatabase.length + 1,
+                title: title,
+                company: company,
+                location: location,
+                type: "Full-Time",
+                desc: desc
+            };
+
+            jobsDatabase.unshift(newJob); // Add to top of list
+            alert("Job posted successfully!");
+            
+            // Clear form
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postCompany').value = '';
+            document.getElementById('postLocation').value = '';
+            document.getElementById('postDesc').value = '';
+
+            switchView('home'); // Send user back to home to see their post
+        }
+
+        // Simulate Job Application
+        function submitApplication() {
+            alert("Application submitted successfully! (Email notification simulated)");
+            switchView('home');
+        }
+
+        // Initial render
+        renderJobs(jobsDatabase);
+
+        // Listen for "Enter" key on search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchJobs();
+            }
+        });
+    </script>
+</body>
+</html>
